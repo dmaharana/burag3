@@ -2,19 +2,15 @@ from flask import Flask,request,jsonify
 from flask_cors import CORS
 from flask import Flask
 import os
-import json
 import logging
 import chardet
-from datetime import datetime
 import pandas as pd
 from werkzeug.utils import secure_filename
-from handler_db_details import get_database_counts
-from handler_generate_bot_response import send_bot_response
 from handler_ingest_data import ingest_data_from_dataframe
 from handler_search import search_bugs
-from handler_find_days import get_incidents_by_days_handler
 from config import read_env_file
 from handler_tool_manager import tool_handler
+from toolManager import Result
 
 
 app = Flask(__name__)
@@ -91,34 +87,6 @@ def read_csv_with_encoding_detection(file_path):
 @app.route('/')
 def index():
     return 'hello world'
-
-
-# # REST API endpoints
-# @app.route('/api/chat', methods=['POST'])
-# def respond_to_user():
-#     # respond to user message
-#     try:
-#         data = request.get_json()
-#         user_messages = data['message'] if 'message' in data else None
-#         logging.info(f"Received message: {use_messages}")
-
-#         if not user_messages:
-#             return jsonify({
-#                 'error':True,
-#                 'message': 'No message received'}), 400
-#         bot_response = send_bot_response(data)
-
-#         return jsonify({
-#             'error':False,
-#             'message': 'Request processed successfully',
-#             'bot_response': bot_response
-#             }), 200
-
-#     except Exception as e:
-#         logging.error(f"Error processing request: {e}")
-#         return jsonify({
-#             'error':True,
-#             'message': 'Error processing request'}), 500
 
 
 @app.route('/api/ingest',methods=['POST'])
@@ -252,21 +220,16 @@ def get_days_toolcall():
         data = request.get_json()
         user_message = data['message'] if 'message' in data else None
         logging.info(f"User message: {user_message}")
-        result = tool_handler(user_message)
-        # if isinstance(result, dict) and 'error' in result:
-        #     return jsonify(result), 500
 
-        return jsonify({
-            'error': False,
-            'message': f"Incidents retrieved for last days",
-            'result': result
-        }), 200
+        result = tool_handler(user_message)
+        if result.error:
+            return jsonify(result), 500
+
+        return jsonify(result), 200
     except Exception as e:
         logging.error(f"Error processing request: {e}")
-        return jsonify({
-            'error': True,
-            'message': f'Error processing request: {str(e)}'
-        }), 500
+        result = Result(error=True, message=f"Error processing request: {str(e)}", result=None)
+        return jsonify(result), 500
 
 
 # Alternative endpoint with configurable days parameter

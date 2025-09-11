@@ -9,6 +9,7 @@ from datetime import datetime
 from dataclasses import dataclass
 from psycopg2.extras import RealDictCursor
 from datetime import datetime, timedelta
+from typing import Any
 '''
 The @dataclass Decorator
 
@@ -27,6 +28,15 @@ class BugData:
     sys_created_on: datetime
     sys_created_by: str
     priority: int
+
+@dataclass
+class IncidentSummary:
+    count:int
+    incident_numbers:List[str]
+    created_by_users:List[str]
+    priority:List[int]
+    solutions:List[str]
+    incidents:List[Dict[str,Any]]
 
 class BugRagSystem:
 
@@ -62,7 +72,7 @@ class BugRagSystem:
 
     # Get incidents created in last week (with detailed records)
 
-    def get_incidents_by_days(self, days: int) -> dict:
+    def get_incidents_by_days(self, days: int) -> IncidentSummary:
         with self.get_db_connection() as conn:
             with conn.cursor(cursor_factory=RealDictCursor) as cursor:
                 query = """
@@ -104,15 +114,14 @@ class BugRagSystem:
 
                 incident_numbers = [incident['incident_number'] for incident in filtered]
                 count = len(incident_numbers)
-                return {
-                    'count': count,
-                    'incident_numbers': incident_numbers,
-                    'created_by_users': list(users),
-                    'priority': priority_values,
-                    'solutions': list(solutions),
-                    'incidents': filtered,
-                    'created_date': sys_created_on
-                }
+                return IncidentSummary(
+                    count=count,
+                    incident_numbers=incident_numbers,
+                    created_by_users=list(users),
+                    priority=priority_values,
+                    solutions=list(solutions),
+                    incidents=filtered,
+                )
 
     def store_bug(self, bug_data: BugData) -> int:
         logging.info(f"Storing bug data: {bug_data}")
