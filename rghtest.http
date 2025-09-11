@@ -1,0 +1,39 @@
+@server = http://localhost:5000
+
+####
+POST http://localhost:11434/api/embed
+Content-Type: "application/json"
+
+ {
+  "model": "nomic-embed-text:latest",
+  "input": "The sky is blue because of Rayleigh scattering" 
+}
+
+
+
+@query1=0042 riverts are not assembled properly 0042.
+# @query1=Missing hole in 3D Model of 0011
+# @query1=Magicvolo
+####
+POST http://localhost:5000/api/search
+Content-Type: application/json
+
+{
+  "query": "{{query1}}"
+}
+
+
+
+
+# @query=find incidents created in last 50 days.
+# @query=find incidents created in last 2 weeks.
+# @query=find incidents created in last 1 month.
+@query=find incidents created in last 10 days.
+
+####
+POST http://localhost:5000/api/toolcall_days
+Content-Type: application/json
+
+{
+  "message": "{{query}}"
+}

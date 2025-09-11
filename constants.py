@@ -1,0 +1,6 @@
+ENV_FILE_PATH = ".env"
+LLM_CHAT_API = "/api/chat"
+LLM_EMBEDDING_API = "api/embedding"
+STREAM_RESPONSE = True
+EMBEDDING_MODEL = "text-embedding-ada-002"
+EMBEDDING_DIMENSION = 768

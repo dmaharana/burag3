@@ -1,0 +1,9 @@
+ollama
+langchain_ollama
+flask
+flask_cors
+pandas
+psycopg2-binary
+openai
+python-dotenv
+gunicorn
