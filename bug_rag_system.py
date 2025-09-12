@@ -87,7 +87,7 @@ class BugRagSystem:
                                 ELSE 'Unknown'
                             END AS priority_level
                     FROM bugs
-                    WHERE sys_created_on >= NOW() - INTERVAL '%s days'
+                    WHERE sys_created_on >= NOW() - INTERVAL '1 day' * %s
                     AND sys_created_on <= NOW()
                     ORDER BY sys_created_on DESC
                 """
@@ -292,7 +292,7 @@ class BugRagSystem:
         # Get the count of bugs in the database.
         with self.get_db_connection() as conn:
             with conn.cursor() as cursor:
-                cusrsor.execute("select count(*) from bugs")
+                cursor.execute("select count(*) from bugs")
                 return cursor.fetchone()[0]
 
     def get_embedding_count(self):
