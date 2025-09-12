@@ -2,7 +2,6 @@
 from config import read_env_file
 from toolManager import OllamaToolCaller, ToolManager, Result
 import logging
-import json
 
 def tool_handler(user_message: str = "Get incidents created from last 7 days") -> Result:
     try:
@@ -13,11 +12,12 @@ def tool_handler(user_message: str = "Get incidents created from last 7 days") -
         if not responses:
             return Result(error=True, message="No tool responses", result=None)
 
-        result = responses[0]
-
+        logging.info(f"Responses: {responses}")
+        result = None
         for tool_name, tool_response in responses.items():
             logging.info(f"Tool name: {tool_name}")
             logging.info(f"Tool response: {tool_response}")
+            result = tool_response
             
         return result
 
