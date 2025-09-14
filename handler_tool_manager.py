@@ -1,6 +1,6 @@
 # handler_tool_manager.py
 from config import read_env_file
-from toolManager import OllamaToolCaller, ToolManager, Result
+from tool_manager import OllamaToolCaller, ToolManager, Result
 import logging
 
 def tool_handler(user_message: str = "Get incidents created from last 7 days") -> Result:

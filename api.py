@@ -10,7 +10,7 @@ from handler_ingest_data import ingest_data_from_dataframe
 from handler_search import search_bugs
 from config import read_env_file
 from handler_tool_manager import tool_handler
-from toolManager import Result
+from tool_manager import Result
 
 
 app = Flask(__name__)
