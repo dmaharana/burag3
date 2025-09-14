@@ -8,7 +8,7 @@ from config import read_env_file
 # Configure logging
 logging.basicConfig(
     format='%(asctime)s - %(levelname)s - %(filename)s:%(lineno)d - %(message)s',
-    level=logging.DEBUG 
+    level=logging.INFO  #DEBUG 
 )
 logger = logging.getLogger(__name__)
 
