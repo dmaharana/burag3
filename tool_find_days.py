@@ -17,7 +17,7 @@ def get_incidents_by_days_tool(days: int) -> Result:
     try:
         incidents = rag_system.get_incidents_by_days(days)
         logging.info(f"raw Incidents responses: {incidents}")
-        if not incidents or not incidents.get('incidents'):
+        if not incidents or not incidents.count > 0:
             logging.warning("No incidents found for the given days")
             return Result(error=True, message="No incidents found for the given days", result=None)
         
